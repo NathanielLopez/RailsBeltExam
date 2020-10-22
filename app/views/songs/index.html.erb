@@ -1,0 +1,64 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>Belt Exam</title>
+  <%= stylesheet_link_tag    'application', media: 'all', 'data-turbolinks-track' => true %>
+  <%= javascript_include_tag 'application', 'data-turbolinks-track' => true %>
+  <%= csrf_meta_tags %>
+
+  <style>
+table {
+  font-family: arial, sans-serif;
+  border-collapse: collapse;
+  width: 100%;
+}
+
+td, th {
+  border: 1px solid #dddddd;
+  text-align: left;
+  padding: 8px;
+}
+
+tr:nth-child(even) {
+  background-color: #dddddd;
+}
+</style>
+</head>
+<body>
+
+<h2>All the songs in our hub:</h2>
+<table>
+    <tr>
+        <th>Artist</th>
+        <th>Title</th>
+        <th>No. of Times Song Has Been Added</th>
+        <th>Add to Playlist</th>
+    </tr>
+    <% @songs.each do |s| %>
+    <tr>
+        <td><%= s.artist %></td>
+        <td><%= link_to "#{s.title}", "/songs/#{s.id}" %></td>
+        <td><%= s.adds.count %></td>
+        <td> 
+            <form method="post" action="/adds/create/<%= s.id %>" class="button_to">
+                <input type="hidden" name="authenticity_token" value="<%= form_authenticity_token %>">
+                <input value="Add" type="submit" />
+            </form>
+        </td>
+    </tr>
+    <% end %>
+
+</table>
+
+
+<h2>Add a Song:</h2>
+<form action="/songs" method='post' id="content">
+    <input type="hidden" name="authenticity_token" value="<%= form_authenticity_token %>">
+    Title: <input type="text" name="song[title]">
+    <br>
+    Artist: <input type="text" name="song[artist]">
+    <input type="submit" value="Add Song">
+</form>
+
+</body>
+</html>
